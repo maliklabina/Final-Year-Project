@@ -140,9 +140,14 @@ export default function AppHeader() {
                 {/* Project / Workspace Status */}
                 <div className="px-4 py-2 text-[11px] font-semibold text-gray-700 bg-gray-50/60 border-b border-gray-100">
                   <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Workspace</span>
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-                    <span>Personal Finance</span>
+                  <div className="flex items-center justify-between mt-0.5">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse" />
+                      <span>Personal Finance</span>
+                    </div>
+                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded border border-emerald-300">
+                      Live
+                    </span>
                   </div>
                 </div>
 

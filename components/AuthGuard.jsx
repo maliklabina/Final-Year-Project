@@ -15,7 +15,7 @@ export default function AuthGuard({ children }) {
   if (loading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="card px-6 py-4 text-sm">Loading your command deck...</div>
+        <div className="card px-6 py-4 text-sm font-bold">Loading FinPlan...</div>
       </div>
     );
   }

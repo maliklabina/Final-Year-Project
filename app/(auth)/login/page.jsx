@@ -48,10 +48,7 @@ export default function LoginPage() {
   };
 
   return (
-    <AuthShell
-      title="Enter the Financial Command Deck"
-      subtitle="Log in to sync your transactions and run Prophet ML forecasts."
-    >
+    <AuthShell title="Log In">
       <form onSubmit={handleSubmit} className="space-y-3 pt-2">
         <div>
           <label className="text-xs font-bold block mb-1">EMAIL</label>

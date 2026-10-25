@@ -23,6 +23,26 @@ export async function POST(req) {
     );
   }
 
-  const json = await upstream.json();
+  // Safely parse the upstream body — Prophet may return an empty or
+  // non-JSON body on certain errors, which would crash the route handler
+  // and cause Next.js to send an empty response (triggering the
+  // "Unexpected end of JSON input" error on the client).
+  let json;
+  try {
+    json = await upstream.json();
+  } catch {
+    return NextResponse.json(
+      {
+        detail: {
+          code: 'FORECAST_PARSE_ERROR',
+          message:
+            `ML service returned an unreadable response (HTTP ${upstream.status}). ` +
+            'Check the uvicorn terminal for errors.',
+        },
+      },
+      { status: 502 }
+    );
+  }
+
   return NextResponse.json(json, { status: upstream.status });
 }

@@ -290,34 +290,31 @@ export default function ChatbotWidget() {
 
   return (
     <div className="fixed bottom-5 right-5 z-50">
-      {/* ── COMPACT CHAT WINDOW ──────────────────────────────────────────────── */}
+      {/* ── EXPANDED CHAT WINDOW ─────────────────────────────────────────────── */}
       {isOpen && (
-        <div className="mb-2.5 w-[88vw] sm:w-[340px] h-[450px] max-h-[75vh] card card-static flex flex-col overflow-hidden bg-white shadow-xl animate-in slide-in-from-bottom-2 fade-in duration-150">
+        <div className="mb-3 w-[90vw] sm:w-[380px] h-[500px] max-h-[80vh] card card-static flex flex-col overflow-hidden bg-white shadow-2xl animate-in slide-in-from-bottom-2 fade-in duration-150">
           {/* Header */}
-          <div className="px-3.5 py-2.5 bg-[#FEF08A] border-b-[2.5px] border-[#111827] flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-2">
-              <FinnyLogo className="w-6 h-6 shrink-0" />
+          <div className="px-4 py-3 bg-[#FEF08A] border-b-[2.5px] border-[#111827] flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-2.5">
+              <FinnyLogo className="w-7 h-7 shrink-0" />
               <div>
-                <div className="flex items-center gap-1.5 leading-none">
-                  <h3 className="font-extrabold text-xs text-[#111827]">Finny</h3>
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                </div>
-                <span className="text-[9px] font-bold text-gray-700">Financial Copilot</span>
+                <h3 className="font-extrabold text-sm text-[#111827] leading-none">Finny</h3>
+                <span className="text-[10px] font-bold text-gray-700">Financial Copilot</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
               <button
                 onClick={() => setMessages([messages[0]])}
                 title="Clear chat"
-                className="p-1 rounded-md border border-[#111827] bg-white text-[#111827] hover:bg-gray-100 transition-colors shadow-[1px_1px_0px_#111827]"
+                className="p-1.5 rounded-lg border-2 border-[#111827] bg-white text-[#111827] hover:bg-gray-100 transition-colors shadow-[1px_1px_0px_#111827]"
               >
                 <ClearIcon />
               </button>
               <button
                 onClick={() => setIsOpen(false)}
                 title="Close chat"
-                className="p-1 rounded-md border border-[#111827] bg-white text-[#111827] hover:bg-gray-100 transition-colors shadow-[1px_1px_0px_#111827]"
+                className="p-1.5 rounded-lg border-2 border-[#111827] bg-white text-[#111827] hover:bg-gray-100 transition-colors shadow-[1px_1px_0px_#111827]"
               >
                 <CloseIcon />
               </button>
@@ -325,12 +322,12 @@ export default function ChatbotWidget() {
           </div>
 
           {/* Quick Action Suggestion Chips */}
-          <div className="px-2.5 py-1.5 bg-[#FFFDF7] border-b border-gray-200 overflow-x-auto flex gap-1 shrink-0 no-scrollbar">
+          <div className="px-3 py-2 bg-[#FFFDF7] border-b border-gray-200 overflow-x-auto flex gap-1.5 shrink-0 no-scrollbar">
             {QUICK_ACTIONS.map((action, i) => (
               <button
                 key={i}
                 onClick={() => handleSend(action)}
-                className="px-2 py-0.5 rounded-md text-[9px] font-bold whitespace-nowrap bg-white border border-[#111827] shadow-[1px_1px_0px_#111827] hover:bg-[#FEF08A] active:translate-x-[0.5px] active:translate-y-[0.5px] transition-all"
+                className="px-2.5 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap bg-white border border-[#111827] shadow-[1px_1px_0px_#111827] hover:bg-[#FEF08A] active:translate-x-[0.5px] active:translate-y-[0.5px] transition-all"
               >
                 {action}
               </button>
@@ -338,36 +335,36 @@ export default function ChatbotWidget() {
           </div>
 
           {/* Messages Stream */}
-          <div className="flex-1 p-3 space-y-2.5 overflow-y-auto bg-[#FAFAF9]/60 text-[11px]">
+          <div className="flex-1 p-3.5 space-y-3 overflow-y-auto bg-[#FAFAF9]/60 text-xs">
             {messages.map((m) => (
               <div
                 key={m.id}
                 className={`flex flex-col ${m.sender === 'user' ? 'items-end' : 'items-start'}`}
               >
                 <div
-                  className={`max-w-[88%] rounded-xl p-2.5 border border-[#111827] font-medium leading-relaxed whitespace-pre-wrap ${
+                  className={`max-w-[88%] rounded-xl p-3 border-2 border-[#111827] font-medium leading-relaxed whitespace-pre-wrap ${
                     m.sender === 'user'
-                      ? 'bg-[#FF5722] text-white shadow-[1.5px_1.5px_0px_#111827] rounded-tr-none'
+                      ? 'bg-[#FF5722] text-white shadow-[2px_2px_0px_#111827] rounded-tr-none font-semibold'
                       : m.type === 'success'
-                      ? 'bg-[#A7F3D0] text-[#111827] shadow-[1.5px_1.5px_0px_#111827] rounded-tl-none font-semibold'
+                      ? 'bg-[#A7F3D0] text-[#111827] shadow-[2px_2px_0px_#111827] rounded-tl-none font-semibold'
                       : m.type === 'delete'
-                      ? 'bg-[#FECDD3] text-[#111827] shadow-[1.5px_1.5px_0px_#111827] rounded-tl-none font-semibold'
+                      ? 'bg-[#FECDD3] text-[#111827] shadow-[2px_2px_0px_#111827] rounded-tl-none font-semibold'
                       : m.type === 'summary'
-                      ? 'bg-[#DDD6FE] text-[#111827] shadow-[1.5px_1.5px_0px_#111827] rounded-tl-none'
-                      : 'bg-white text-[#111827] shadow-[1.5px_1.5px_0px_#111827] rounded-tl-none'
+                      ? 'bg-[#DDD6FE] text-[#111827] shadow-[2px_2px_0px_#111827] rounded-tl-none'
+                      : 'bg-white text-[#111827] shadow-[2px_2px_0px_#111827] rounded-tl-none'
                   }`}
                 >
                   {m.text}
                 </div>
-                <span className="text-[8px] text-gray-500 mt-0.5 px-1 font-bold">
+                <span className="text-[9px] text-gray-500 mt-0.5 px-1 font-bold">
                   {m.sender === 'user' ? 'You' : 'Finny'} • {new Date(m.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
             ))}
 
             {isTyping && (
-              <div className="flex items-center gap-1.5 text-[10px] text-gray-500 font-bold bg-white p-2 rounded-lg border border-[#111827] w-fit shadow-[1px_1px_0px_#111827]">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" /> Updating portfolio...
+              <div className="flex items-center gap-2 text-xs text-gray-600 font-bold bg-white p-2.5 rounded-xl border-2 border-[#111827] w-fit shadow-[2px_2px_0px_#111827]">
+                <span className="animate-spin text-sm">⚙</span> Updating portfolio...
               </div>
             )}
             <div ref={messagesEndRef} />
@@ -379,7 +376,7 @@ export default function ChatbotWidget() {
               e.preventDefault();
               handleSend();
             }}
-            className="p-2 bg-white border-t-2 border-[#111827] flex items-center gap-1.5 shrink-0"
+            className="p-2.5 bg-white border-t-2 border-[#111827] flex items-center gap-2 shrink-0"
           >
             <input
               ref={inputRef}
@@ -387,12 +384,12 @@ export default function ChatbotWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask Finny or type a transaction..."
-              className="flex-1 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[#FAFAF9] border border-[#111827] outline-none focus:shadow-[1.5px_1.5px_0px_#111827] transition-all placeholder:text-gray-400"
+              className="flex-1 px-3 py-2 rounded-xl text-xs font-medium bg-[#FAFAF9] border-2 border-[#111827] outline-none focus:shadow-[2px_2px_0px_#111827] transition-all placeholder:text-gray-400"
             />
             <button
               type="submit"
               disabled={!input.trim() || isTyping}
-              className="p-2 rounded-lg bg-[#FF5722] text-white border border-[#111827] shadow-[1.5px_1.5px_0px_#111827] hover:bg-[#F4511E] active:translate-x-[1px] active:translate-y-[1px] disabled:opacity-40 transition-all shrink-0 flex items-center justify-center"
+              className="p-2.5 rounded-xl bg-[#FF5722] text-white border-2 border-[#111827] shadow-[2px_2px_0px_#111827] hover:bg-[#F4511E] active:translate-x-[1px] active:translate-y-[1px] disabled:opacity-40 transition-all shrink-0 flex items-center justify-center"
               title="Send"
             >
               <SendIcon />
@@ -401,17 +398,14 @@ export default function ChatbotWidget() {
         </div>
       )}
 
-      {/* ── COMPACT FLOATING TRIGGER BUTTON ("Ask Finny") ────────────────────── */}
+      {/* ── FLOATING TRIGGER BUTTON ("Ask Finny") ────────────────────────────── */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#FF5722] text-white border-2 border-[#111827] shadow-[3px_3px_0px_#111827] hover:translate-x-[-1px] hover:translate-y-[-1px] active:translate-x-[1px] active:translate-y-[1px] transition-all font-bold text-xs group"
+        className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#FF5722] text-white border-[2.5px] border-[#111827] shadow-[3px_3px_0px_#111827] hover:translate-x-[-1px] hover:translate-y-[-1px] active:translate-x-[1px] active:translate-y-[1px] transition-all font-bold text-xs sm:text-sm group"
         aria-label="Ask Finny"
       >
-        <FinnyLogo className="w-4 h-4 shrink-0 transition-transform group-hover:scale-110" />
+        <FinnyLogo className="w-5 h-5 shrink-0 transition-transform group-hover:scale-110" />
         <span className="tracking-tight">{isOpen ? 'Close' : 'Ask Finny'}</span>
-        {!isOpen && (
-          <span className="w-1.5 h-1.5 rounded-full bg-[#A3E635] border border-[#111827] animate-pulse" />
-        )}
       </button>
     </div>
   );

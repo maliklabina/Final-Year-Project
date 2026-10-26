@@ -237,21 +237,41 @@ export default function ForecastPage() {
       {/* ── ERROR CARD ───────────────────────────────────────────────────────── */}
       {error && (
         <div
-          className="card card-static p-6 space-y-2"
+          className="card card-static p-6 space-y-3"
           style={{ background: '#FEE2E2', borderColor: '#B91C1C', boxShadow: '6px 6px 0px #B91C1C' }}
         >
           <p className="font-bold text-red-800 text-lg">
             {error.code === 'ML_SERVICE_DOWN'
-              ? '🔌 ML Service is Not Running'
+              ? '🔌 ML Service Required'
+              : error.code === 'FORECAST_TIMEOUT'
+              ? '⏱ Forecast Request Timed Out'
               : '❌ Forecast Failed'}
           </p>
           <p className="text-sm text-red-700">{error.message}</p>
           {error.code === 'ML_SERVICE_DOWN' && (
-            <pre className="text-xs bg-white/60 rounded-lg p-3 border border-red-300 mt-2 overflow-x-auto">
-              cd ml-service{'\n'}
-              venv\Scripts\activate{'\n'}
-              uvicorn main:app --reload --port 8000
-            </pre>
+            <div className="space-y-2 mt-2 pt-2 border-t border-red-200">
+              <p className="text-xs font-bold text-red-800">
+                To run the ML service locally:
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
+                <div className="bg-white/80 p-3 rounded-lg border border-red-200">
+                  <p className="font-bold text-stone-700 font-sans mb-1">macOS / Linux</p>
+                  <pre className="text-stone-900 overflow-x-auto whitespace-pre">
+                    cd ml-service{'\n'}
+                    source venv/bin/activate{'\n'}
+                    uvicorn main:app --reload --port 8000
+                  </pre>
+                </div>
+                <div className="bg-white/80 p-3 rounded-lg border border-red-200">
+                  <p className="font-bold text-stone-700 font-sans mb-1">Windows</p>
+                  <pre className="text-stone-900 overflow-x-auto whitespace-pre">
+                    cd ml-service{'\n'}
+                    venv\Scripts\activate{'\n'}
+                    uvicorn main:app --reload --port 8000
+                  </pre>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       )}

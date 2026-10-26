@@ -64,6 +64,12 @@ export default function ForecastPage() {
   const [forecast90, setForecast90] = useState(null);
   const [error, setError] = useState(null);
   const [seeding, setSeeding] = useState(false);
+  const [customMlUrl, setCustomMlUrl] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('finplan_ml_url') || '';
+    }
+    return '';
+  });
 
   // Build the daily expense series from all transactions
   const series = useMemo(() => buildDailySeries(transactions), [transactions]);
@@ -119,18 +125,30 @@ export default function ForecastPage() {
   }, [series, forecastSlice]);
 
   // ── Handlers ─────────────────────────────────────────────────────────────────
-  const handleRun = async () => {
+  const handleRun = async (overrideUrl = null) => {
     if (!hasEnough || running) return;
     setRunning(true);
     setError(null);
     setForecast90(null);
     try {
-      const result = await fetchForecast(series, 90);
+      const urlToUse = overrideUrl !== null ? overrideUrl : customMlUrl.trim();
+      const result = await fetchForecast(series, 90, urlToUse || null);
       setForecast90(result);
     } catch (err) {
       setError(err instanceof ForecastError ? err : new ForecastError('FORECAST_FAILED', String(err)));
     } finally {
       setRunning(false);
+    }
+  };
+
+  const handleSaveCustomUrl = (url) => {
+    setCustomMlUrl(url);
+    if (typeof window !== 'undefined') {
+      if (url.trim()) {
+        localStorage.setItem('finplan_ml_url', url.trim());
+      } else {
+        localStorage.removeItem('finplan_ml_url');
+      }
     }
   };
 
@@ -249,9 +267,54 @@ export default function ForecastPage() {
           </p>
           <p className="text-sm text-red-700">{error.message}</p>
           {error.code === 'ML_SERVICE_DOWN' && (
-            <div className="space-y-2 mt-2 pt-2 border-t border-red-200">
+            <div className="space-y-3 mt-2 pt-2 border-t border-red-200">
+              {typeof window !== 'undefined' &&
+                window.location.hostname !== 'localhost' &&
+                window.location.hostname !== '127.0.0.1' && (
+                  <div className="bg-white/90 p-4 rounded-xl border border-red-300 space-y-2 text-xs">
+                    <p className="font-bold text-stone-900 text-sm">
+                      💡 You are browsing the live Firebase cloud site
+                    </p>
+                    <p className="text-stone-700">
+                      Your Python ML service is running locally on your laptop (<code className="font-mono bg-stone-100 px-1 py-0.5 rounded">http://localhost:8000</code>).
+                      Web browsers block public cloud websites from accessing private local ports for security (mixed-content policy).
+                    </p>
+                    <div className="flex flex-wrap items-center gap-2 pt-1">
+                      <a
+                        href="http://localhost:3001/forecast"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3.5 py-1.5 rounded-lg font-bold bg-[#FF5722] text-white inline-flex items-center gap-1 shadow-sm hover:opacity-90"
+                      >
+                        🚀 Open Local App (http://localhost:3001/forecast)
+                      </a>
+                    </div>
+                    <div className="pt-2 border-t border-stone-200 space-y-1">
+                      <p className="font-bold text-stone-800">
+                        Or connect a public HTTPS ML service URL (e.g. ngrok / Render):
+                      </p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <input
+                          type="text"
+                          placeholder="https://xyz.ngrok-free.app"
+                          value={customMlUrl}
+                          onChange={(e) => handleSaveCustomUrl(e.target.value)}
+                          className="px-3 py-1.5 rounded-lg border border-stone-300 text-xs flex-1 min-w-[240px] font-mono text-stone-900"
+                        />
+                        <button
+                          onClick={() => handleRun()}
+                          disabled={running || !customMlUrl.trim()}
+                          className="px-3.5 py-1.5 rounded-lg font-bold bg-[#111827] text-white disabled:opacity-40 text-xs"
+                        >
+                          Save & Run
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
               <p className="text-xs font-bold text-red-800">
-                To run the ML service locally:
+                To start or verify the ML service locally:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
                 <div className="bg-white/80 p-3 rounded-lg border border-red-200">
